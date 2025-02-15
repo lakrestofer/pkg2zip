@@ -25,16 +25,11 @@
           default =
             pkgs.mkShell.override
               {
-                # Override stdenv in order to change compiler:
                 stdenv = pkgs.gccStdenv;
               }
               {
                 packages = with pkgs; [
-                  (python3.withPackages (
-                    p: with p; [
-
-                    ]
-                  ))
+                  python3
                   gcc
                   clang-tools
                   gdb
@@ -43,6 +38,37 @@
                 ];
 
               };
+        }
+      );
+
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.stdenv.mkDerivation {
+            pname = "pkg2zip";
+            version = "0.1";
+
+            src = ./.;
+
+            # nativeBuildInputs = [ pkgs.makeWrapper ]; # If you need wrappers
+            buildInputs = [ ]; # Add dependencies like pkgs.openssl if needed
+
+            buildPhase = ''
+              printenv
+              make
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin
+              cp ./pkg2zip $out/bin/
+            '';
+
+            meta = {
+              description = "Decrypts PlayStation Vita pkg file and packages to zip archive";
+              license = pkgs.lib.licenses.unlicense;
+              platforms = pkgs.lib.platforms.linux;
+            };
+          };
         }
       );
     };

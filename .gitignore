@@ -6,3 +6,4 @@ pkg2zip.exe
 *.pdb
 *.zip
 .direnv
+result
