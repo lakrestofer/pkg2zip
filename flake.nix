@@ -26,17 +26,17 @@
             pkgs.mkShell.override
               {
                 # Override stdenv in order to change compiler:
-                stdenv = pkgs.clangStdenv;
+                stdenv = pkgs.gccStdenv;
               }
               {
                 packages = with pkgs; [
-                  glxinfo
-                  cglm
-                  glfw
-                  blas
+                  (python3.withPackages (
+                    p: with p; [
+
+                    ]
+                  ))
+                  gcc
                   clang-tools
-                  meson
-                  ninja
                   gdb
                   typos
                   pkg-config
